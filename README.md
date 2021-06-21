@@ -26,14 +26,109 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
 
+***
+
 ## Some notes for myself about Angular:
 
-* codes on div
+### codes on div
 
-`
+```javascript
+//loop
+*ngFor=""
+//if
+*ngIf=""
+//variable
+{{ product.name }}  /* use variable directly */
+[title]="product.name + 'details'" /* add variable for attributes */
+//onclick
+(click)="fucntion()"
+```
 
-* cannot find module issue
+### pass data to child component
+
+*child components.ts* 
+```javascript
+//add type for prop
+//product is the name of the variable used in html
+//Product is certain Type
+//! forces to use the mentioned type
+@Input() product!: Product;
+```
+*parent components.html* 
+```javascript
+//app-product-alerts here is the child component selector, 
+//[product] is the variable passed to child
+<app-product-alerts
+  [product]="product">
+</app-product-alerts>
+```
+
+### Pass data to a parent component
+
+*child components.ts* 
+```javascript
+//@Output() allows the ProductAlertsComponent to emit an event when the value of the notify property changes.
+@Output() notify = new EventEmitter();
+```
+
+*child components.html* 
+```javascript
+//function should be the same as output
+<button (click)="notify.emit()">Notify Me</button>
+```
+
+*parent components.ts and components.html* 
+```javascript
+//add function in class
+onNotify() {
+    window.alert('You will be notified when the product goes on sale');
+}
+//add function in html as prop
+<app-product-alerts
+  [product]="product"
+  (notify)="onNotify()">
+</app-product-alerts>
+```
+
+### router
+add path in `src/app/app.module.ts`
+
+    RouterModule.forRoot([
+      { path: '', component: ProductListComponent },
+      { path: 'products/:productId', component: ProductDetailsComponent },
+    ])
+add routerLink in html
+
+    [routerLink]="['/products',product.id]"
+    
+get router id
+```javascript
+export class ProductDetailsComponent implements OnInit {
+    //this types
+    product: Product|undefined;
+    //parameters in constructor can be called as this.method in functions
+    constructor(
+        private route: ActivatedRoute,
+    ) { }
+    //get product id and set member variable
+    ngOnInit() {
+    const routeParams = this.route.snapshot.paramMap;
+    const productIdFromRoute = Number(routeParams.get('productId'));
+    this.product = products.find(product => product.id === productIdFromRoute);
+    }
+}
+```
+
+### pipes
+
+example: `<h4>{{ product.price | currency }}</h4>` show number to a currency string eg. "$10"
+
+ 
+
+
+
+
+### cannot find module issue
 
 This is usually a problem after adding routes in *src/app/app.app.module.ts*. The problem is nothing about codes but because of stackblitz.com. To fix the issue, just simply **save the codes and reload the page**.
-
 
