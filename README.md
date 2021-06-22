@@ -1,6 +1,6 @@
 # angularTutorial
 
-This project follows the guidance on [Angular tutorial](https://angular.io/start) and w was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.5.
+This project follows the guidance on [Angular tutorial](https://angular.io/start) and was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.5. Below in this markdown file, there are some notes about angular.
 
 ## Development server
 
@@ -121,12 +121,108 @@ export class ProductDetailsComponent implements OnInit {
 
 ### pipes
 
-example: `<h4>{{ product.price | currency }}</h4>` show number to a currency string eg. "$10"
+example: 
 
- 
+`<h4>{{ product.price | currency }}</h4>` show number to a currency string eg. "$10"  
+`*ngFor="let shipping of shippingCosts | async"` returns the latest value from a stream of data and continues to do so for the life of a given component
 
+### Service
 
+can be used for the whole project.
 
+E.g.
+
+```
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class CartService {
+	items: Product[] = [];
+
+    addToCart(product: Product) {
+      this.items.push(product);
+    }
+}
+```
+
+### HTTPClient
+
+1. add HttpClientModule in `imports` in app.modules.ts 
+```
+import { HttpClientModule } from '@angular/common/http';
+```
+2. add http in service constructor
+```
+import { HttpClient } from '@angular/common/http';
+constructor(
+    private http: HttpClient
+  ) {}
+```
+3. add function such as return getting data from json
+```
+this.http.get<{type: string, price: number}[]>('/assets/shipping.json');
+```
+
+### form
+
+uses FormBuilder to create form
+
+in ts
+
+```
+import { Component } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+
+import { CartService } from '../cart.service';
+
+@Component({
+  selector: 'app-cart',
+  templateUrl: './cart.component.html',
+  styleUrls: ['./cart.component.css']
+})
+export class CartComponent {
+  items = this.cartService.getItems();
+  checkoutForm = this.formBuilder.group({
+    name: '',
+    address: ''
+  });
+  constructor(
+    private cartService: CartService,
+    private formBuilder: FormBuilder,
+    ) {}
+
+  onSubmit(): void {
+    // Process checkout data here
+    this.items = this.cartService.clearCart();
+    console.warn('Your order has been submitted', this.checkoutForm.value);
+    this.checkoutForm.reset();
+  }
+}
+```
+in html
+```
+<form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+
+  <div>
+    <label for="name">
+      Name
+    </label>
+    <input id="name" type="text" formControlName="name">
+  </div>
+
+  <div>
+    <label for="address">
+      Address
+    </label>
+    <input id="address" type="text" formControlName="address">
+  </div>
+
+  <button class="button" type="submit">Purchase</button>
+
+</form>
+```
 
 ### cannot find module issue
 
