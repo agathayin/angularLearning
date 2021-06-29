@@ -10,6 +10,7 @@
 <body>
     //then "query" will be the variable name for this input value
     <input id="searchQuery" ng-model="query" />
+    <button ng-click="click()"></button>
 </body>
 </html>
 ```
@@ -24,7 +25,7 @@ myApp.controller('MyController',function MyController($scope, $http){ <-ng-contr
 ### booleans and loops
 ng-show, ng-hide (`ng-show="query"` means if query exists, then show)
 ng-if
-ng-repeat `ng-repeat="item in list"`
+ng-repeat `ng-repeat="item in list"` or `ng-repeat="(key,meeting) in meetings"`
 
 ### service
 $http (runs with a server, returns a promise)
@@ -38,7 +39,7 @@ $http.get('data.json').then(function(response) {
 variable | currency, number, date, lowercase, uppercase
 limitTo:qty:start `limitTo:4:1 -> second to fifth`
 filter:keyword `filter: query -> filter result according to query`
-orderBy:key:reverse `orderBy:'name':'reverse' -> order by name and reverse`
+orderBy: key: reverse `orderBy:'name':'reverse' -> order by name and reverse`
 
 ### route 
 ```
@@ -70,6 +71,7 @@ myControllers.controller('DetailsController',
 ```
 
 ### href
+link must have #
 `ng-href="#/someroute"`
 
 ### form
@@ -84,3 +86,39 @@ ng-submit="login()" add this on form, and it is the function for submit the whol
 
 ### include html
 `ng-include="'views/nav.html'"`
+
+### class or style
+conditional style
+```
+ng-class="variableName"
+```
+
+### scope
+(not the same as this)
+```
+$scope.$parent
+$scope.$watch
+$scope.$on
+$scope.$root
+$scope.$apply
+```
+```
+(private)
+$scope.$$watchers
+$scope.$$postDigest
+$scope.$$phase
+$scope.$$destroyed
+```
+
+if no value in son scope, then read `_proto:parentScope`, if exists, reads value in son scope  
+send scope from parent to son  
+(js)
+```
+angular.module('learndigest'.controller('PlaygroundCtrol, function($scope){
+	this.force = 30
+})
+angular.module('learndigest'.controller('InteralCtrl, function($scope){
+	$scope.force = $scope.playground.force
+})
+```
+(html) `ng-controller="PlaygroundCtrl as playground"`
