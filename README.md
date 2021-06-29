@@ -1,6 +1,8 @@
 # angularLearning
 
-Personal learning notes about Angular and some simple projects following the guidance on [Angular tutorial](https://angular.io/start).
+Personal learning notes on Angular and some simple projects following the guidance on [Angular tutorial](https://angular.io/start).
+
+My learning notes on AngularJS is [here](https://github.com/agathayin/angularLearning/tree/main/angularjs-learning)
 
 ### codes on div
 
