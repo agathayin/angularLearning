@@ -262,3 +262,56 @@ app.component('modal',{
 ### div to safe links
 ngSanitize. after linky, it means open a new tab and the second is custom attribution  
 `div ng-bind-html="blog.post | linky:'_blank':{rel: 'nofollow}"></div>`
+
+### $resource (REST api)
+*regular usage* [tutorial](https://docs.angularjs.org/tutorial/step_13)  
+* inject `ngResource` in the module
+* add service and factory with resource
+```
+angular.
+  module('core.phone').
+  factory('Phone', ['$resource',
+    function($resource) {
+      return $resource('phones/:phoneId.json', {}, {
+        query: {
+          method: 'GET',
+          params: {phoneId: 'phones'},
+          isArray: true
+        }
+      });
+    }
+  ]);
+```
+* add module and service in index.html
+* controllers injects the service and use `ServiceName.query()`
+*ui-route*  
+The steps of controllers and service are the same. No need to add link into html but in config/*.routes.js, must contains resove function
+```
+.state('monitors.priceLog',{
+        parent: 'monitors',
+        url: '/priceLog?SKU',
+        templateUrl: 'modules/monitors/client/views/list-monitors-price.client.view.html',
+        controller: 'MonitorsListPriceController',
+        controllerAs: 'vm',
+        data: {
+          roles: ['user', 'admin'],
+          pageTitle: 'Monitors Price List'
+        },
+        resolve: {
+          monitorResolve: priceLogMonitor
+        }
+      })
+...
+priceLogMonitor.$inject = ['PriceLogService'];
+function priceLogMonitor(PriceLogService) {
+    return new PriceLogService();
+}
+```
+*using fetch*
+if has to use fetch, use `$scope.$apply()` to refresh this or vm, or the variable doesn't change. E.g.  
+```
+fetch('url',{method: 'GET'}).then((res)=>res.json()).then((res)=>{
+    vm.logs = res;
+    $scope.$apply();
+})
+```
