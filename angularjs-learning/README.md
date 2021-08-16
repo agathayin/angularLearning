@@ -89,6 +89,12 @@ ng-submit="login()" add this on form, and it is the function for submit the whol
 
 `ng-change` this could be a good replacement for $watch
 
+### select
+ng-options
+```
+<select ng-model="vm.contentToAdd.boxId" ng-options='box.boxId as box.boxCode+" ("+box.boxId+") " for box in vm.selffulfillment.box'></select>
+```
+
 ### include html
 speed will be lower, component is recommended as a replacement
 `ng-include="'views/nav.html'"`
