@@ -321,3 +321,13 @@ fetch('url',{method: 'GET'}).then((res)=>res.json()).then((res)=>{
     $scope.$apply();
 })
 ```
+
+### scanner trigger function with carriage enter  
+```
+<input ng-model="text" ng-keydown="onKeydown($event) />
+
+const onKeydown=(e)=>{ $timeout(()=>foo(),1000) }
+```
+note:  
+ng-keypressed is not supported by android chrome. only ng-keydown will trigger events.  
+scanner does not send all events orderly. it will send keycodes like `[keycode1,keycode2,13,keycode3, keycode4, keycode5]`. If scanned text is not long, waiting 1 second will solve the problem and get the correct `$scope.text`.
